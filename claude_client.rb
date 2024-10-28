@@ -12,8 +12,8 @@ class ClaudeClient
     body = {
       messages: [{ role: 'user', content: prompt }],
       model: 'claude-3-sonnet-20240229',
-      max_tokens: 1000,
-      temperature: 0.7
+      max_tokens: 800,
+      temperature: 1.0
     }
 
     response = HTTParty.post(

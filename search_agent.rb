@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-require 'httparty'
-require 'nokogiri'
 require 'dotenv'
-require 'json'
 
 require './claude_client'
 require './openai_client'
@@ -14,7 +11,7 @@ class SearchAgent
     'Focus on key points and ensure information is accurate and well-organized:\n\n'
 
   CREATE_STORY_PROMPT = 'Please create a spooky Halloween story based on the following content. ' \
-    'Use modern technologies and concepts that are relevant to today:\n\n'
+    'Incorporate specific examples of modern web technology. Do not use more that 500 tokens.\n\n'
 
   def initialize(claude_key: nil, openai_key: nil)
     @claude_client = ClaudeClient.new(claude_key)
@@ -26,16 +23,24 @@ class SearchAgent
   def summarize(query, num_results: 3)
     content = WebSearcher.new.search(query, num_results:)
 
-    prompt = "#{SUMMARIZE_PROMPT}<content>#{content}</content>"
+    summary_prompt = "#{SUMMARIZE_PROMPT}<content>#{content}</content>"
 
     # Generate summaries based on specified provider
     summaries = {}
-    summaries[:claude] = @claude_client.send(prompt)
-    summaries[:openai] = @openai_client.send(prompt)
+    puts "Running claude prompt: #{summary_prompt[0..350]}..."
+    summaries[:claude] = @claude_client.send(summary_prompt)
+
+    puts "Running openai prompt: #{summary_prompt[0..350]}..."
+    summaries[:openai] = @openai_client.send(summary_prompt)
+
+    create_story_prompt = "#{CREATE_STORY_PROMPT}<content>#{content}</content>"
 
     stories = {}
-    stories[:claude] = @claude_client.send("#{CREATE_STORY_PROMPT}<content>#{content}</content>")
-    stories[:openai] = @openai_client.send("#{CREATE_STORY_PROMPT}<content>#{content}</content>")
+    puts "Running claude prompt: #{create_story_prompt[0..350]}..."
+    stories[:claude] = @claude_client.send(create_story_prompt)
+
+    puts "Running openai prompt: #{create_story_prompt[0..350]}..."
+    stories[:openai] = @openai_client.send(create_story_prompt)
 
     { summaries:, stories: }
   end
@@ -45,16 +50,14 @@ end
 if __FILE__ == $PROGRAM_NAME
   Dotenv.load
 
-  # Initialize with both APIs
   agent = SearchAgent.new(
     claude_key: ENV['ANTHROPIC_API_KEY'],
     openai_key: ENV['OPENAI_API_KEY']
   )
 
   begin
-    # Get summaries from both AIs
     results = agent.summarize(
-      'worst disasters caused by software bugs',
+      ARGV[0] || 'worst disasters caused by software bugs',
       num_results: 3
     )
 
