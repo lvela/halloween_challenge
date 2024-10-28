@@ -1,0 +1,46 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    bigdecimal (3.1.8)
+    dotenv (2.8.1)
+    event_stream_parser (1.0.0)
+    faraday (2.12.0)
+      faraday-net_http (>= 2.0, < 3.4)
+      json
+      logger
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
+    faraday-net_http (3.3.0)
+      net-http
+    httparty (0.21.0)
+      mini_mime (>= 1.0.0)
+      multi_xml (>= 0.5.2)
+    json (2.6.3)
+    logger (1.6.1)
+    mini_mime (1.1.5)
+    multi_xml (0.7.1)
+      bigdecimal (~> 3.1)
+    multipart-post (2.4.1)
+    net-http (0.4.1)
+      uri
+    nokogiri (1.15.6-x86_64-darwin)
+      racc (~> 1.4)
+    racc (1.8.1)
+    ruby-openai (7.3.1)
+      event_stream_parser (>= 0.3.0, < 2.0.0)
+      faraday (>= 1)
+      faraday-multipart (>= 1)
+    uri (0.13.1)
+
+PLATFORMS
+  x86_64-darwin-22
+
+DEPENDENCIES
+  dotenv (~> 2.8.1)
+  httparty (~> 0.21.0)
+  json (~> 2.6.3)
+  nokogiri (~> 1.15.0)
+  ruby-openai (~> 7.3.0)
+
+BUNDLED WITH
+   2.4.10
