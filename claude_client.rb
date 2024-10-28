@@ -4,19 +4,16 @@ require 'httparty'
 require 'json'
 
 class ClaudeClient
-  SUMMARIZE_PROMPT = 'Please analyze and summarize the following content. ' \
-    'Focus on key points and ensure information is accurate and well-organized:\n\n'
-
   def initialize(api_key)
     @api_key = api_key
   end
 
-  def send(content)
+  def send(prompt)
     body = {
+      messages: [{ role: 'user', content: prompt }],
       model: 'claude-3-sonnet-20240229',
       max_tokens: 1000,
-      temperature: 0.7,
-      messages: [{ role: 'user', content: "#{SUMMARIZE_PROMPT}<content>#{content}</content>" }]
+      temperature: 0.7
     }
 
     response = HTTParty.post(

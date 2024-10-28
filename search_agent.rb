@@ -10,20 +10,25 @@ require './openai_client'
 require './web_searcher'
 
 class SearchAgent
-  def initialize(claude_key: nil, openai_key: nil)
-    @claude = ClaudeClient.new(claude_key)
-    @openai = OpenAIClient.new(openai_key)
+  SUMMARIZE_PROMPT = 'Please analyze and summarize the following content. ' \
+    'Focus on key points and ensure information is accurate and well-organized:\n\n'
 
-    raise 'API key is required.' if @claude.nil? || @openai.nil?
+  def initialize(claude_key: nil, openai_key: nil)
+    @claude_client = ClaudeClient.new(claude_key)
+    @openai_client = OpenAIClient.new(openai_key)
+
+    raise 'API key is required.' if @claude_client.nil? || @openai_client.nil?
   end
 
-  def summarize(query, num_results: 3, provider: :both)
-    contents = WebSearcher.new.search(query)
+  def summarize(query, num_results: 3)
+    content = WebSearcher.new.search(query, num_results:)
+
+    prompt = "#{SUMMARIZE_PROMPT}<content>#{content}</content>"
 
     # Generate summaries based on specified provider
     summaries = {}
-    summaries[:claude] = @claude.send(contents)
-    summaries[:openai] = @openai.send(contents)
+    summaries[:claude] = @claude_client.send(prompt)
+    summaries[:openai] = @openai_client.send(prompt)
     summaries
   end
 end
@@ -52,7 +57,5 @@ if __FILE__ == $PROGRAM_NAME
     puts "\nOpenAI's Summary:"
     puts '----------------'
     puts results[:openai]
-    # rescue StandardError => e
-    #   puts "Error: #{e.message}"
   end
 end

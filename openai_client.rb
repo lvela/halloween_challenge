@@ -3,18 +3,15 @@
 require 'openai'
 
 class OpenAIClient
-  SUMMARIZE_PROMPT = 'Please analyze and summarize the following content. ' \
-    'Focus on key points and ensure information is accurate and well-organized:\n\n'
-
   def initialize(api_key)
     @client = ::OpenAI::Client.new(access_token: api_key)
   end
 
-  def send(content)
+  def send(prompt)
     response = @client.chat(
       parameters: {
         model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: "#{SUMMARIZE_PROMPT}<content>#{content}</content>" }],
+        messages: [{ role: 'user', content: prompt }],
         max_tokens: 1000,
         temperature: 0.7
       }
