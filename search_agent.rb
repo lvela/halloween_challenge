@@ -13,6 +13,9 @@ class SearchAgent
   SUMMARIZE_PROMPT = 'Please analyze and summarize the following content. ' \
     'Focus on key points and ensure information is accurate and well-organized:\n\n'
 
+  CREATE_STORY_PROMPT = 'Please create a spooky Halloween story based on the following content. ' \
+    'Use modern technologies and concepts that are relevant to today:\n\n'
+
   def initialize(claude_key: nil, openai_key: nil)
     @claude_client = ClaudeClient.new(claude_key)
     @openai_client = OpenAIClient.new(openai_key)
@@ -29,7 +32,12 @@ class SearchAgent
     summaries = {}
     summaries[:claude] = @claude_client.send(prompt)
     summaries[:openai] = @openai_client.send(prompt)
-    summaries
+
+    stories = {}
+    stories[:claude] = @claude_client.send("#{CREATE_STORY_PROMPT}<content>#{content}</content>")
+    stories[:openai] = @openai_client.send("#{CREATE_STORY_PROMPT}<content>#{content}</content>")
+
+    { summaries:, stories: }
   end
 end
 
@@ -50,12 +58,24 @@ if __FILE__ == $PROGRAM_NAME
       num_results: 3
     )
 
+    summary_results = results[:summaries]
+
     puts "\nClaude's Summary:"
     puts '----------------'
-    puts results[:claude]
+    puts summary_results[:claude]
 
     puts "\nOpenAI's Summary:"
     puts '----------------'
-    puts results[:openai]
+    puts summary_results[:openai]
+
+    story_results = results[:stories]
+
+    puts "\nClaude's Story:"
+    puts '----------------'
+    puts story_results[:claude]
+
+    puts "\nOpenAI's Story:"
+    puts '----------------'
+    puts story_results[:openai]
   end
 end
