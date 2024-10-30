@@ -29,6 +29,13 @@ end
 if __FILE__ == $PROGRAM_NAME
   Dotenv.load
 
+  puts ENV['OPENAI_API_KEY']
+
+  if ENV['ANTHROPIC_API_KEY'].nil? || ENV['OPENAI_API_KEY'].nil?
+    puts 'Please set ANTHROPIC_API_KEY and OPENAI_API_KEY in .env file.'
+    return
+  end
+
   agent = Agent.new(
     claude_key: ENV['ANTHROPIC_API_KEY'],
     openai_key: ENV['OPENAI_API_KEY']
@@ -42,12 +49,12 @@ if __FILE__ == $PROGRAM_NAME
       num_results: 3
     )
 
-    puts "\nClaude's Summary:"
-    puts '----------------'
+    puts "\n\nClaude's Summary:"
+    puts '---------------------'
     puts summary_results[:claude]
 
-    puts "\nOpenAI's Summary:"
-    puts '----------------'
+    puts "\n\nOpenAI's Summary:"
+    puts '---------------------'
     puts summary_results[:openai]
 
     story_results = agent.create_stories(
@@ -55,12 +62,12 @@ if __FILE__ == $PROGRAM_NAME
       num_results: 3
     )
 
-    puts "\nClaude's Story:"
-    puts '----------------'
+    puts "\n\nClaude's Story:"
+    puts '---------------------'
     puts story_results[:claude]
 
-    puts "\nOpenAI's Story:"
-    puts '----------------'
+    puts "\n\nOpenAI's Story:"
+    puts '---------------------'
     puts story_results[:openai]
   end
 end

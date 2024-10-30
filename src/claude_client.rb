@@ -11,7 +11,7 @@ class ClaudeClient
   def send(prompt)
     body = {
       messages: [{ role: 'user', content: prompt }],
-      model: 'claude-3-sonnet-20240229',
+      model: 'claude-3-5-sonnet-20241022',
       max_tokens: 800,
       temperature: 1.0
     }
