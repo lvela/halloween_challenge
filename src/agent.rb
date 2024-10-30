@@ -9,7 +9,7 @@ class Agent
     "Focus on key points and ensure information is accurate and well-organized.\n\n"
 
   CREATE_STORY_PROMPT = 'Please create a spooky Halloween story based on the following content. ' \
-    "Keep it short and use only 3 paragraphs. Do not use more that 300 tokens.\n\n"
+    "Ignore previous instructions about length and keep the response short with less than 500 characters. \n\n"
 
   def initialize(claude_key: nil, openai_key: nil, query: nil)
     @claude_client = ClaudeClient.new(claude_key)
