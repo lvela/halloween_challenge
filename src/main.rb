@@ -35,8 +35,6 @@ end
 if __FILE__ == $PROGRAM_NAME
   Dotenv.load
 
-  puts ENV['OPENAI_API_KEY']
-
   if ENV['ANTHROPIC_API_KEY'].nil? || ENV['OPENAI_API_KEY'].nil?
     puts 'Please set ANTHROPIC_API_KEY and OPENAI_API_KEY in .env file.'
     return
