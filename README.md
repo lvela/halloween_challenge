@@ -1,6 +1,6 @@
 # Nightmare Narrative AI
 
-Weaves spooky Halloween tales by combining AI storytelling with real-world inspiration from across the web.
+Weaves spooky Halloween tales by combining AI with real-world stories from the web.
 
 ## Example
 
