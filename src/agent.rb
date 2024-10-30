@@ -6,10 +6,10 @@ require './web_searcher'
 
 class Agent
   SUMMARIZE_PROMPT = 'Please analyze and summarize the following content. ' \
-    'Focus on key points and ensure information is accurate and well-organized.\n\n'
+    "Focus on key points and ensure information is accurate and well-organized.\n\n"
 
   CREATE_STORY_PROMPT = 'Please create a spooky Halloween story based on the following content. ' \
-    'Keep it 3 paragraphs. Do not use more that 300 tokens.\n\n'
+    "Keep it short and use only 3 paragraphs. Do not use more that 300 tokens.\n\n"
 
   def initialize(claude_key: nil, openai_key: nil, query: nil)
     @claude_client = ClaudeClient.new(claude_key)
@@ -20,15 +20,15 @@ class Agent
   end
 
   def summarize
-    summary_prompt = "#{SUMMARIZE_PROMPT}<content>#{content}</content>"
+    summary_prompt = "#{SUMMARIZE_PROMPT} #{content}"
 
     # Generate summaries based on specified provider
     summaries = {}
-    puts '-----------------'
+    puts "\n\n-----------------"
     puts "Running claude prompt: #{summary_prompt[0..550]}..."
     summaries[:claude] = @claude_client.send(summary_prompt)
 
-    puts '-----------------'
+    puts "\n\n-----------------"
     puts "Running openai prompt: #{summary_prompt[0..550]}..."
     summaries[:openai] = @openai_client.send(summary_prompt)
 
@@ -36,14 +36,14 @@ class Agent
   end
 
   def create_stories
-    create_story_prompt = "#{CREATE_STORY_PROMPT}<content>#{content}</content>"
+    create_story_prompt = "#{CREATE_STORY_PROMPT} #{content}"
 
     stories = {}
-    puts '-----------------'
+    puts "\n\n-----------------"
     puts "Running claude prompt: #{create_story_prompt[0..550]}..."
     stories[:claude] = @claude_client.send(create_story_prompt)
 
-    puts '-----------------'
+    puts "\n\n-----------------"
     puts "Running openai prompt: #{create_story_prompt[0..550]}..."
     stories[:openai] = @openai_client.send(create_story_prompt)
 

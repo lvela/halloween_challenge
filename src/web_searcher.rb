@@ -13,6 +13,7 @@ class WebSearcher
   private
 
   def search_and_extract(query, num_results)
+    puts "Searching for: \"#{query}\""
     urls = search_duckduckgo(query, num_results)
 
     contents = urls.map do |url|
@@ -49,7 +50,7 @@ class WebSearcher
     main_content = doc.css('body').text
     puts "main content length: #{main_content.length}"
 
-    "Content from: #{url}\n\n#{remove_whitespace(main_content)}"
+    "Content from: #{url}\n\n<content>#{remove_whitespace(main_content)}</content>"
   end
 
   def remove_whitespace(text)
